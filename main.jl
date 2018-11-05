@@ -5,11 +5,11 @@ default(fmt = :png)
 function main()
     # Ler dados.csv
     x=A[:,1]
-    y=A[:,2] 
+    y=A[:,2]
 
     kfold(x, y)
 
-    p = 1 ####### Sua escolha
+    p = 8                                 ####### Sua escolha
     xlin = linspace(extrema(x)..., 100)
     β = regressao_polinomial(x, y, p)
     ylin = β[1] * ones(100)
@@ -21,24 +21,9 @@ function main()
     png("ajuste")
 
     # Calcule a medida R²=1-Sr/Sq
-    m = length(y)
-    for i=1:m
-        soma+=y[i]
-    end
-    ymed=soma/m
-    for i=1:m
-         for j=1:m
-            M[i,j]=dot(y[j],yi]
-            C[i,j]=dot(y[j],y[i]
-         end
-    end
-    \betha=M\C
-    
-    for i=1:m
-           ypred +=\betha[i]*y[i]
-    end
-        
-    R2=1-norm(ypred-y)^2/norm(ymed-y)^2
+    Sr_pred=norm(y-y_pred)^2
+    R2_pred=1-Sr_pred/ST
+
 end
 
 function regressao_polinomial(x, y, p)
@@ -51,14 +36,19 @@ end
 function kfold(x, y; num_folds = 5, max_p=15)
     m = length(x)
     k = div(m, num_folds)                          # Calcule o tamanho do fold
-    I = randperm(m)                                # Embaralhe a ordem dos dados 
+    I = randperm(m)                                 # Embaralhe a ordem dos dados
 
     # Seu código aqui
-   return regressao_polinomial(x, y, c)
-   ypred[i]=
-    
-   for i=1:c
-   soma=(y[i] - ypred[i])^2+soma
+
+    E_teste, E_treino=zeros(num_folds,max_p), zeros(num_folds,max_p)
+    # x_tr, y_tr, x_te, y_te = x[1:k], y[1:k], x[k+1:end], y[k+1:end] treino e teste divididos oa meio
+
+   β=regressao_polinomial(x, y, p)
+   y_med = mean(y)
+   y_pred = [β[1] .+ sum(β[j + 1] * x[i].^j for j = 1:p) for i = 1:m]
+
+   for i=1:p
+   soma=(y[i] - ypred[i])^2+soma)
    E = 1/(2*m)*soma,                               # N o número de elementos no cjto
 
     png("kfold")
